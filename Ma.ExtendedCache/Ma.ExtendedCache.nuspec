@@ -1,0 +1,18 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>Ma.ExtendedCache</id>
+    <version>$version$</version>
+    <title>$title$</title>
+    <authors>MammadovAdil</authors>
+    <owners>MammadovAdil</owners>
+    <licenseUrl>https://github.com/MammadovAdil/ExtendedCache/blob/master/LICENSE</licenseUrl>
+    <projectUrl>https://github.com/MammadovAdil/ExtendedCache</projectUrl>
+    <iconUrl>https://cdn1.iconfinder.com/data/icons/hardware-devices-and-gadgets/64/devices_memory_card-128.png</iconUrl>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>Extended version of MemoryCache.</description>
+    <releaseNotes>First release.</releaseNotes>
+    <copyright>Copyright 2017</copyright>
+    <tags>Cache Data MemoryCache</tags>
+  </metadata>
+</package>
