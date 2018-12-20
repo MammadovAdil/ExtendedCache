@@ -1,64 +1,92 @@
 ﻿using System;
 using System.Collections.Specialized;
 using System.Runtime.Caching;
+using System.Threading.Tasks;
 
 namespace Ma.ExtendedCache
 {
-    /// <summary>
-    /// Caching class which extends memory cache.
-    /// </summary>
-    public class ExtendedMemoryCache
-        : MemoryCache
+  /// <inheritdoc />
+  public class ExtendedMemoryCache
+      : MemoryCache, IExtendedCache
+  {
+    public ExtendedMemoryCache(string name, NameValueCollection config = null)
+        : base(name, config)
     {
-        public ExtendedMemoryCache(string name, NameValueCollection config = null)
-            : base(name, config)
-        {            
-        }
-
-        private static ObjectCache cache = Default;
-
-        /// <summary>
-        /// If value already exists in cache get it,
-        /// otherwise get value using provided function
-        /// and add it to cache for further usage.
-        /// </summary>
-        /// <exception cref="ArgumentNullException">
-        /// When key or cacheSourceGetter is null
-        /// </exception>
-        /// <typeparam name="T">Typeof cache item.</typeparam>
-        /// <param name="key">Key for cache.</param>
-        /// <param name="cacheSourceGetter">Function to get source if needed.</param>
-        /// <param name="keepHour">How many hours should this item be keeped in cahce.</param>
-        /// <returns>Item from cache or from source.</returns>
-        public static T Retrieve<T>(
-            string key, 
-            Func<T> cacheSourceGetter,
-            int keepHour)
-            where T : class
-        {
-            if (string.IsNullOrEmpty(key))
-                throw new ArgumentNullException("key");
-            if (cacheSourceGetter == null)
-                throw new ArgumentNullException("cacheSourceGetter");
-
-            if (cache.Contains(key))
-            {
-                return cache.Get(key) as T;
-            }
-            else
-            {
-                // Get value from source
-                T value = cacheSourceGetter.Invoke();
-
-                CacheItem cahceItem = new CacheItem(key, value);
-                CacheItemPolicy policy = new CacheItemPolicy();
-                policy.AbsoluteExpiration =
-                    new DateTimeOffset(DateTime.Now.Add(TimeSpan.FromHours(keepHour)));
-
-                cache.Add(cahceItem, policy);
-
-                return value;
-            }
-        }
     }
+
+    private ObjectCache _cache = Default;
+
+    public T Retrieve<T>(
+        string key,
+        Func<T> retreieveFromSource,
+        int keepHour)
+        where T : class
+    {
+      if (string.IsNullOrEmpty(key))
+        throw new ArgumentNullException("key");
+      if (retreieveFromSource == null)
+        throw new ArgumentNullException("retreieveFromSource");
+
+      if (_cache.Contains(key))
+      {
+        return this.RetreieveFromCache<T>(key);
+      }
+      else
+      {
+        // Get value from source
+        var value = retreieveFromSource();
+
+        this.AddToCache<T>(key, value, keepHour);
+
+        return value;
+      }
+    }
+
+    public async Task<T> RetrieveAsync<T>(
+      string key,
+      Func<Task<T>> retreieveFromSourceAsync,
+      int keepHour)
+      where T : class
+    {
+      if (string.IsNullOrEmpty(key))
+        throw new ArgumentNullException(nameof(key));
+      if (retreieveFromSourceAsync == null)
+        throw new ArgumentNullException(nameof(retreieveFromSourceAsync));
+
+      if (_cache.Contains(key))
+      {
+        return this.RetreieveFromCache<T>(key);
+      }
+      else
+      {
+        // Get value from source
+        var value = await retreieveFromSourceAsync();
+
+        this.AddToCache<T>(key, value, keepHour);
+
+        return value;
+      }
+    }
+
+    private T RetreieveFromCache<T>(string key)
+      where T : class
+    {
+      if (_cache.Contains(key) == false)
+        return null;
+
+      return _cache.Get(key) as T;
+    }
+
+    private void AddToCache<T>(string key, T value, int keepHour)
+      where T : class
+    {
+      var cahceItem = new CacheItem(key, value);
+      var policy = new CacheItemPolicy
+      {
+        AbsoluteExpiration = new DateTimeOffset(DateTime.Now.Add(TimeSpan.FromHours(keepHour)))
+      };
+
+      _cache.Add(cahceItem, policy);
+    }
+  }
 }

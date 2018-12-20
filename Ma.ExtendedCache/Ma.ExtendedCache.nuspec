@@ -11,7 +11,7 @@
     <iconUrl>https://cdn1.iconfinder.com/data/icons/hardware-devices-and-gadgets/64/devices_memory_card-128.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Extended version of MemoryCache.</description>
-    <releaseNotes>First release.</releaseNotes>
+    <releaseNotes>Add support for async and eliminate static methods.</releaseNotes>
     <copyright>Copyright 2017</copyright>
     <tags>Cache Data MemoryCache</tags>
   </metadata>
