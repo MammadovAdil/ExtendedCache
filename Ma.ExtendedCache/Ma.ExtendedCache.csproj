@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net7</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <OutputType>Library</OutputType>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
@@ -12,13 +12,13 @@
     <Copyright>Copyright 2023</Copyright>
     <PackageProjectUrl>https://github.com/MammadovAdil/ExtendedCache</PackageProjectUrl>
     <RepositoryUrl>https://github.com/MammadovAdil/ExtendedCache</RepositoryUrl>
-    <PackageReleaseNotes>Migrate to .Net 7</PackageReleaseNotes>
+    <PackageReleaseNotes>Upgrade to .Net 9</PackageReleaseNotes>
     <Title>ExtendedCache by Adil Mammadov</Title>
     <PackageTags>cache;data;memory-cache;</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageIcon>icon.png</PackageIcon>
     <PackageLicenseFile>License.md</PackageLicenseFile>
-    <Version>2.0.0</Version>
+    <Version>9.0.0</Version>
   </PropertyGroup>
 
   <ItemGroup>
@@ -39,6 +39,6 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-    <PackageReference Include="System.Runtime.Caching" Version="7.0.0" />
+    <PackageReference Include="System.Runtime.Caching" Version="9.0.0" />
   </ItemGroup>
 </Project>
